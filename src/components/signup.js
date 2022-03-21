@@ -11,12 +11,25 @@ import Checkbox from '@material-ui/core/Checkbox';
 import AddIcon from "@material-ui/icons/Add";
 import { Fab } from "@material-ui/core";
 import axios from "axios"
+import { useHistory } from "react-router-dom";
 const Signup = () => {
 
 
-    function register() {
-        axios.post("https://ndrfassemble.herokuapp.com/profile", {})
+    let history = useHistory()
+
+    function register(event) {
+        event.preventDefault()
+        axios.post("https://ndrfassemble.herokuapp.com/profile", { info })
+            .then((result) => {
+                console.log(result)
+                // localStorage.setItem("token",result.data)
+                history.push("/")
+            })
     }
+
+
+
+
 
     const paperStyle = { padding: '30px 20px', width: 400, margin: 0 }
     const headerStyle = { margin: 0 }
@@ -24,17 +37,33 @@ const Signup = () => {
     const marginTop = { marginTop: 5 }
     const [selectedFile, setSelectedFile] = useState(null);
     const [info, setinfo] = useState({
-        name: "",
+        username: "",
         email: "",
-        phonenumber: "",
+        phone_number: "",
         currentlocationlatitude: "",
         currentlocationlongitude: "",
         password: "",
 
     })
 
+    function register(event) {
+        event.preventDefault()
+        axios.post("https://ndrfassemble.herokuapp.com/profile", info)
+            .then((result) => {
+                console.log(result)
+                localStorage.setItem("token", info)
+                history.push("/")
+            })
+    }
 
-    async function getLocation() {
+
+    console.log(info)
+
+
+    async function getLocation(event) {
+
+
+        event.preventDefault()
 
         if (navigator.geolocation) {
             (navigator.geolocation.getCurrentPosition(showPosition))
@@ -46,7 +75,7 @@ const Signup = () => {
     }
 
     async function showPosition(position) {
-
+        console.log(position)
 
         setinfo((prev) => {
             return {
@@ -99,7 +128,7 @@ const Signup = () => {
 
                     <TextField fullWidth onChange={(e) => setName(e, "password")} label='Password' placeholder="Enter your password" />
                     <TextField fullWidth label='Confirm Password' placeholder="Confirm your password" />
-                    <button onClick={getLocation}>Access Location</button>
+                    <button onClick={(event) => getLocation(event)}>Access Location</button>
                     {/* <label>User Image 
                     <input
                      fullWidth
@@ -159,7 +188,7 @@ const Signup = () => {
                         control={<Checkbox name="checkedA" />}
                         label="I accept the terms and conditions."
                     />
-                    <Button fullWidth type='submit' variant='contained' color='primary'>Sign up</Button>
+                    <Button onClick={register} fullWidth type='submit' variant='contained' color='primary'>Sign up</Button>
                 </form>
             </Paper>
         </Grid>

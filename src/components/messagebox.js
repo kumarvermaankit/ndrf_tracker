@@ -85,7 +85,7 @@ function MessageBox(props) {
   function Send(event) {
 
     event.preventDefault()
-    socket.emit("message", { msg: { message: message, username: "Ankit" }, roomName: roomName })
+    socket.emit("message", { msg: { message: message, username: localStorage.getItem("token").username }, roomName: roomName })
     setmessage("")
   }
 
@@ -144,7 +144,7 @@ function MessageBox(props) {
               />
               <div className="chatbtn2">
                 <button style={{ background: "transparent", border: "none" }} onClick={() => picker ? setpicker(false) : setpicker(true)}><InsertEmoticonIcon /></button>
-                <button className="send_btn" onClick={(event) => Send(event)}><SendIcon /></button>
+                <button className="send_btn" style={{ margin: "0" }} onClick={(event) => Send(event)}><SendIcon /></button>
               </div>
             </div>
             <span>
